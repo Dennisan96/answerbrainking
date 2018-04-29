@@ -1,0 +1,6 @@
+This program consist of following steps:
+
+1 how to catch questions
+2 how to search and capture answers
+3 how to response on the phone
+
