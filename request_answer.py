@@ -39,7 +39,7 @@ def get_answer(serach_engine, question, possible_answer_list):
 
     print(choice_counts)
 
-    print(possible_answer_list[index_max])
+    print(question, 'is ', possible_answer_list[index_max])
 
 
 
