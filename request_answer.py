@@ -10,9 +10,9 @@ serach_engine_dict = {
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36'}
 
 
-def request_answer(serach_engine, question, *args):
+def get_answer(serach_engine, question, possible_answer_list):
     #record all possible answer
-    possible_answer_list = [possible_answer for possible_answer in args]
+    #possible_answer_list = [possible_answer for possible_answer in args]
 
     if serach_engine == 'baidu':
         question_encode = {'wd': question}
@@ -30,8 +30,8 @@ def request_answer(serach_engine, question, *args):
 
     choice_counts = []
 
-    for i in range(len(args)):
-        choice_counts.append(rh.text.count(possible_answer_list[i]))
+    for i in range(len(possible_answer_list)):
+        choice_counts.append(rh.text.lower().count(possible_answer_list[i]))
 
     choice_counts = list(map(int, choice_counts))
 
@@ -39,11 +39,9 @@ def request_answer(serach_engine, question, *args):
 
     print(choice_counts)
 
-    print(args[index_max])
+    print(possible_answer_list[index_max])
 
 
 
-
-request_answer('google',  'current usa president', 'trump', 'toy', 'obama')
 
 
