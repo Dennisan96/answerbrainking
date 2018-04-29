@@ -10,17 +10,16 @@ serach_engine_dict = {
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36'}
 
 
-def get_answer(serach_engine, question, possible_answer_list):
-    #record all possible answer
-    #possible_answer_list = [possible_answer for possible_answer in args]
+def get_answer(question, possible_answer_list, search_engine=None):
 
-    if serach_engine == 'baidu':
-        question_encode = {'wd': question}
+    if search_engine is None or search_engine == 'google':
+        url = serach_engine_dict['google']
+        question_encode = {'q': question}
     else:
-        #assume 'google'
-        question_encode =  {'q': question}
+        url = serach_engine_dict['baidu']
+        question_encode = {'wd': question}
 
-    url = serach_engine_dict[serach_engine] + urllib.parse.urlencode(question_encode)
+    url = url + urllib.parse.urlencode(question_encode)
     print("Search on URL: "+url);
 
     rh = requests.get(url, headers=headers)
@@ -36,10 +35,14 @@ def get_answer(serach_engine, question, possible_answer_list):
     choice_counts = list(map(int, choice_counts))
 
     index_max = choice_counts.index(max(choice_counts))
+    if choice_counts[index_max] == 0:
+        #there is no corrent answer
+        return index_max, 'No correct answer'
 
     print('Here is choice count:', choice_counts)
 
-    print(question, 'is ', possible_answer_list[index_max])
+
+    return index_max, possible_answer_list[index_max]
 
 
 
