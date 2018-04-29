@@ -37,7 +37,7 @@ def get_answer(serach_engine, question, possible_answer_list):
 
     index_max = choice_counts.index(max(choice_counts))
 
-    print(choice_counts)
+    print('Here is choice count:', choice_counts)
 
     print(question, 'is ', possible_answer_list[index_max])
 
