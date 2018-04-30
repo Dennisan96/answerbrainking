@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from bs4.element import Comment
 import requests
 import urllib.parse
 import jieba
@@ -19,7 +20,7 @@ def open_query_url(question, search_engine=None):
         question_encode = {'wd': question}
 
     url = url + urllib.parse.urlencode(question_encode)
-    print("Search on URL: "+url);
+    print("Search on URL: " + url);
     urlh = requests.get(url, headers=headers)
     return urlh
 
@@ -51,16 +52,25 @@ def get_answer_by_choices(question, search_engine=None):
     return possible_answer_list[index_max]
 
 
+def tag_visible(element):
+    if element.parent.name in ['style', 'script', 'head', 'title', 'meta', '[document]']:
+        return False
+    if isinstance(element, Comment):
+        return False
+    return True
+
+
 def get_answer_by_wordscount(question, search_engine=None):
     rh = open_query_url(question)
     print('Text:')
     print(rh.text)
     soup = BeautifulSoup(rh.content, 'html.parser')
 
+    text = soup.find_all(text=True)
+    visible_texts = filter(tag_visible, text)
+
     for script in soup(['script', 'style']):
         script.decompose()
 
     text = soup.get_text()
-
-
     print(text)
