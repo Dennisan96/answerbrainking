@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import urllib.parse
+import jieba
 
 serach_engine_dict = {
     'baidu': 'https://www.baidu.com/s?',
@@ -9,9 +10,7 @@ serach_engine_dict = {
 
 headers = {'User-Agent':'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.89 Safari/537.36'}
 
-
-def get_answer(question, possible_answer_list, search_engine=None):
-
+def open_query_url(question, search_engine=None):
     if search_engine is None or search_engine == 'google':
         url = serach_engine_dict['google']
         question_encode = {'q': question}
@@ -21,14 +20,21 @@ def get_answer(question, possible_answer_list, search_engine=None):
 
     url = url + urllib.parse.urlencode(question_encode)
     print("Search on URL: "+url);
+    urlh = requests.get(url, headers=headers)
+    return urlh
 
-    rh = requests.get(url, headers=headers)
-    soup = BeautifulSoup(rh.text, 'html.parser')
 
-    #print(soup.prettify())
+def get_answer_by_choices(question, search_engine=None):
+
+    possible_answer_list = []
+    while True:
+        possible_answer = input('Enter possible answer or finish with an ENTER： ')
+        if len(possible_answer) < 1: break
+        possible_answer_list.append(possible_answer)
+
+    rh = open_query_url(question)
 
     choice_counts = []
-
     for i in range(len(possible_answer_list)):
         choice_counts.append(rh.text.lower().count(possible_answer_list[i]))
 
@@ -42,9 +48,19 @@ def get_answer(question, possible_answer_list, search_engine=None):
     print('Here is choice count:', choice_counts)
 
 
-    return index_max, possible_answer_list[index_max]
+    return possible_answer_list[index_max]
 
 
+def get_answer_by_wordscount(question, search_engine=None):
+    rh = open_query_url(question)
+    print('Text:')
+    print(rh.text)
+    soup = BeautifulSoup(rh.content, 'html.parser')
+
+    for script in soup(['script', 'style']):
+        script.decompose()
+
+    text = soup.get_text()
 
 
-
+    print(text)
