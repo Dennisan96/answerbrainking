@@ -1,8 +1,10 @@
 from bs4 import BeautifulSoup
 from bs4.element import Comment
+from itertools import groupby
 import requests
 import urllib.parse
 import jieba
+
 
 serach_engine_dict = {
     'baidu': 'https://www.baidu.com/s?',
@@ -59,18 +61,29 @@ def tag_visible(element):
         return False
     return True
 
+def seg_list_handler(list):
+    #do nothing at this time
+    return list
+
 
 def get_answer_by_wordscount(question, search_engine=None):
     rh = open_query_url(question)
-    print('Text:')
-    print(rh.text)
-    soup = BeautifulSoup(rh.content, 'html.parser')
+    soup = BeautifulSoup(rh.text, 'lxml')
+    words_list = []
 
-    text = soup.find_all(text=True)
-    visible_texts = filter(tag_visible, text)
+    text = soup.find_all(class_='g')
+    for t in text:
+        temp_seg_list = jieba.cut(t)
+        temp_seg_list = seg_list_handler(temp_seg_list)
+        words_list.extend(temp_seg_list)
+    words_counts_list = [len(list(group)) for key, group in groupby(words_list)]
+
+
+
+    #print (" ".join(t.strip() for t in visible_texts))
 
     for script in soup(['script', 'style']):
         script.decompose()
 
     text = soup.get_text()
-    print(text)
+    #print(text)
