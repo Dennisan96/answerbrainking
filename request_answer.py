@@ -79,11 +79,3 @@ def get_answer_by_wordscount(question, search_engine=None):
     words_counts_list = [len(list(group)) for key, group in groupby(words_list)]
 
 
-
-    #print (" ".join(t.strip() for t in visible_texts))
-
-    for script in soup(['script', 'style']):
-        script.decompose()
-
-    text = soup.get_text()
-    #print(text)

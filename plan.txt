@@ -4,3 +4,7 @@ This program consist of following steps:
 2 how to search and capture answers
 3 how to response on the phone
 
+
+
+To Do:
+what is the reason behind lxml and html parser with extract google search result
