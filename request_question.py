@@ -1,5 +1,6 @@
 import subprocess
-
+from PIL import Image
+from io import StringIO
 
 
 try:
@@ -18,7 +19,8 @@ def get_question_from_prompt():
 
 def get_image():
     process = subprocess.Popen(adb.adb_path+' shell screen -p', shell=True, stdout=subprocess.PIPE)
-
+    b_screenshot = process.stdout.read()
+    return Image.open(StringIO(b_screenshot))
 
 def get_text():
 
