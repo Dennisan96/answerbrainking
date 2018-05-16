@@ -27,3 +27,10 @@ class auto_adb():
             print('请安装 ADB 及驱动并配置环境变量')
             print('具体链接: https://github.com/wangshub/wechat_jump_game/wiki')
             exit(1)
+
+    def run(self, raw_command):
+        command = '{} {}'.format(self.adb_path, raw_command)
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
+        print(type(process))
+        output = process.stdout.read()
+        return output

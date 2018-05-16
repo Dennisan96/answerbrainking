@@ -1,6 +1,7 @@
 import subprocess
 from PIL import Image
 from io import StringIO
+import auto_adb
 
 
 try:
@@ -10,26 +11,22 @@ except Exception as ex:
     exit(1)
 
 
-adb = auto_adb()
-
+adb = auto_adb.auto_adb()
 
 def get_question_from_prompt():
     query = input('Enter the question: ')
     return query
 
 def get_image():
-    process = subprocess.Popen(adb.adb_path+' shell screen -p', shell=True, stdout=subprocess.PIPE)
-    b_screenshot = process.stdout.read()
-    return Image.open(StringIO(b_screenshot))
-
-def get_text():
-
-
+    adb.run('shell screencap -p /sdcard/shot.png')
+    adb.run('pull /sdcard/shot.png')
+    return Image.open('./shot.png')
 
 def get_question_from_screenshot():
     img = get_image()
-    query = get_text(img)
+    query = None
 
     return query
 
 
+get_image()
