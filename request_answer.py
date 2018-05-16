@@ -63,7 +63,11 @@ def tag_visible(element):
 
 def seg_list_handler(list):
     #do nothing at this time
-    return list
+    return None
+
+def text_handelr(txt):
+    return None
+
 
 
 def get_answer_by_wordscount(question, search_engine=None):
@@ -71,11 +75,11 @@ def get_answer_by_wordscount(question, search_engine=None):
     soup = BeautifulSoup(rh.text, 'lxml')
     words_list = []
 
-    text = soup.find_all(class_='g')
-    for t in text:
-        temp_seg_list = jieba.cut(t)
-        temp_seg_list = seg_list_handler(temp_seg_list)
-        words_list.extend(temp_seg_list)
-    words_counts_list = [len(list(group)) for key, group in groupby(words_list)]
+    texts = soup.find_all(class_='g')
+    for t in texts:
+        print(t.text)
+        print("\n")
+
+    return None
 
 

@@ -11,7 +11,7 @@ search_engine_numdict = {
 def main():
     query = request_question.get_question_from_prompt()
 
-    ans = request_answer.get_answer_by_wordscount(query)
+    ans = request_answer.get_answer_by_choices(query)
 
     print(query, 'is', ans)
 
