@@ -13,6 +13,9 @@ def main():
 
     ans = request_answer.get_answer_by_choices(query)
 
+
+    #remove all the png files after computation
+
     print(query, 'is', ans)
 
 if __name__ == '__main__':
