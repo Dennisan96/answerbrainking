@@ -1,6 +1,5 @@
-import request_answer
-import request_question
-
+from request_question import get_qnc_from_screenshot
+from request_answer import get_answer_by_choices
 
 search_engine_numdict = {
     1:'baidu',
@@ -9,14 +8,20 @@ search_engine_numdict = {
 
 
 def main():
-    query = request_question.get_question_from_prompt()
+    while True:
+        signal = input("Enter when you see the question (x for end): ")
+        if signal == '':
+            # enter answering mode
+            query, choice = get_qnc_from_screenshot()
+            answer = get_answer_by_choices(query, choice)
+            print("Answer: ", answer)
 
-    ans = request_answer.get_answer_by_choices(query)
+        elif signal == 'x':
+            print("Program finish")
+            exit(1)
+        else:
+            continue
 
-
-    #remove all the png files after computation
-
-    print(query, 'is', ans)
 
 if __name__ == '__main__':
     main()
