@@ -7,7 +7,17 @@ search_engine_numdict = {
 }
 
 
+DEGUG = False
+
+
 def main():
+
+    if DEGUG:
+        query, choice = get_qnc_from_screenshot(debug=True)
+        answer = get_answer_by_choices(query, choice)
+        print("Answer: ", answer)
+        exit(1)
+
     while True:
         signal = input("Enter when you see the question (x for end): ")
         if signal == '':

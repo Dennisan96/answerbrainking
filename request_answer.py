@@ -23,18 +23,44 @@ def open_query_url(question, search_engine=None):
         question_encode = {'wd': question}
 
     url = url + urllib.parse.urlencode(question_encode)
-    print("Search on URL: " + url);
+    #print("Search on URL: " + url);
     urlh = requests.get(url, headers=headers)
     return urlh
+
+
+def get_choices(answers):
+    output = dict()
+    for a in answers:
+        list = jieba.cut(a, cut_all=True)
+        l = []
+        #print("list", type(list))
+        for item in list:
+            #print("item: ", type(item))
+            if len(item) != 1:
+                l.append(item)
+        output[a] = l
+    #print("output", output)
+    return output
 
 
 def get_answer_by_choices(question, answers):
 
     rh = open_query_url(question)
 
+    # choices = get_choices(answers)
+
+    #print(choices)
+
     choice_counts = []
-    for i in range(len(answers)):
-        choice_counts.append(rh.text.lower().count(answers[i]))
+
+    for a in answers:
+        choice_counts.append(rh.text.lower().count(a))
+
+    #for key, value in choices.items():
+    #    tmp = 0
+     #   for a in value:
+     #       tmp = tmp + rh.text.count(a)
+     #   choice_counts.append(tmp)
 
     choice_counts = list(map(int, choice_counts))
 

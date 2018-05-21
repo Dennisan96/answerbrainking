@@ -53,7 +53,16 @@ def get_choices_from_image(img):
     return cl
 
 
-def get_qnc_from_screenshot():
+def get_qnc_from_screenshot(debug=False):
+    if debug:
+        query = input("Enter question: ")
+        c = list()
+        while True:
+            tmp = input("Enter possible choice: ")
+            if len(tmp) == 0:
+                return query, c
+            else:
+                c.append(tmp)
     img = get_image()
     query = get_question_from_image(img)
     choice = get_choices_from_image(img)

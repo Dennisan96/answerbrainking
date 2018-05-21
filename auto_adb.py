@@ -31,6 +31,6 @@ class auto_adb():
     def run(self, raw_command):
         command = '{} {}'.format(self.adb_path, raw_command)
         process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
-        print(type(process))
+        #print(type(process))
         output = process.stdout.read()
         return output
