@@ -1,5 +1,7 @@
 from request_question import get_qnc_from_screenshot
 from request_answer import get_answer_by_choices
+from auto_adb import tap
+
 
 search_engine_numdict = {
     1:'baidu',
@@ -23,9 +25,17 @@ def main():
         if signal == '':
             # enter answering mode
             query, choice = get_qnc_from_screenshot()
-            answer = get_answer_by_choices(query, choice)
+            answer, ans_index = get_answer_by_choices(query, choice)
             print("Answer: ", answer)
-
+            tap(0)
+            if answer is 'Error':
+                print("Error")
+                continue
+            elif answer is '':
+                print("Error")
+                continue
+            else:
+                tap(0)
         elif signal == 'x':
             print("Program finish")
             exit(1)

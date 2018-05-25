@@ -2,6 +2,29 @@ import os
 import subprocess
 import platform
 
+conf = {
+    0: {
+        "x": 540,
+        "y": 1040,
+    },
+
+    1: {
+        "x": 540,
+        "y": 1230,
+    },
+
+    2: {
+        "x": 540,
+        "y": 1420,
+    },
+
+    3: {
+        "x": 540,
+        "y": 1610,
+    }
+
+}
+
 class auto_adb():
     def __init__(self):
         try:
@@ -34,3 +57,7 @@ class auto_adb():
         #print(type(process))
         output = process.stdout.read()
         return output
+
+
+def tap(option):
+    os.popen('adb shell input tap {0} {1}'.format(conf[option]['x'], conf[option]['y']))

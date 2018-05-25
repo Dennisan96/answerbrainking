@@ -67,11 +67,11 @@ def get_answer_by_choices(question, answers):
     index_max = choice_counts.index(max(choice_counts))
     if choice_counts[index_max] == 0:
         # there is no corrent answer
-        return index_max, 'No correct answer'
+        return 'Error', 0
 
     # print('Here is choice count:', choice_counts)
 
-    return answers[index_max]
+    return answers[index_max], index_max
 
 
 def tag_visible(element):
