@@ -43,10 +43,10 @@ def get_choices(answers):
     return output
 
 
+    this = False
 def get_answer_by_choices(question, answers):
 
     rh = open_query_url(question)
-
     # choices = get_choices(answers)
 
     #print(choices)

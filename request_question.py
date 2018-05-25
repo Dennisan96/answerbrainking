@@ -3,7 +3,9 @@ from PIL import Image
 import pytesseract
 from io import StringIO
 import auto_adb
+from functools import partial
 
+from multiprocessing.dummy import Pool as ThreadPool
 
 try:
     import auto_adb
@@ -36,20 +38,21 @@ def get_question_from_image(img):
 
 
 def get_choices_from_image(img):
-    cl = list()
     h_width = img.size[0]/2
     h_height = img.size[1]/2
-    img_c1 = img.crop((h_width-300, h_height+80, h_width+300, h_height+210))
-    img_c2 = img.crop((h_width-280, h_height+273, h_width+280, h_height+400))
-    # img_c2.save('prob.png')
-    img_c3 = img.crop((h_width-300, h_height+470, h_width+300, h_height+590))
-    img_c4 = img.crop((h_width-300, h_height+660, h_width+300, h_height+800))
-    cl.append(pytesseract.image_to_string(img_c1,  lang='chi_sim'))
-    cl.append(pytesseract.image_to_string(img_c2,  lang='chi_sim'))
-    cl.append(pytesseract.image_to_string(img_c3,  lang='chi_sim'))
-    cl.append(pytesseract.image_to_string(img_c4,  lang='chi_sim'))
-    # print(cl)
+    img_cl = list()
+    #print(pytesseract.image_to_string(img.crop((h_width-300, h_height+80, h_width+300, h_height+210))))
+    img_cl.append(img.crop((h_width-300, h_height+80, h_width+300, h_height+210)))
+    img_cl.append(img.crop((h_width-280, h_height+273, h_width+280, h_height+400)))
+    img_cl.append(img.crop((h_width-300, h_height+470, h_width+300, h_height+590)))
+    img_cl.append(img.crop((h_width-300, h_height+660, h_width+300, h_height+800)))
+    pool = ThreadPool(4)
+    mapfunc = partial(pytesseract.image_to_string, lang='chi_sim')
+    cl = pool.map(mapfunc, img_cl)
 
+    print(cl)
+    pool.close()
+    pool.join()
     return cl
 
 
@@ -64,7 +67,27 @@ def get_qnc_from_screenshot(debug=False):
             else:
                 c.append(tmp)
     img = get_image()
-    query = get_question_from_image(img)
-    choice = get_choices_from_image(img)
+    h_width = img.size[0] / 2
+    h_height = img.size[1] / 2
+    img_cl = []
+    img_cl.append(img.crop((h_width - 500, h_height - 400, h_width + 500, h_height - 80)))
+    img_cl.append(img.crop((h_width-300, h_height+80, h_width+300, h_height+210)))
+    img_cl.append(img.crop((h_width-280, h_height+273, h_width+280, h_height+400)))
+    img_cl.append(img.crop((h_width-300, h_height+470, h_width+300, h_height+590)))
+    img_cl.append(img.crop((h_width-300, h_height+660, h_width+300, h_height+800)))
+    pool = ThreadPool(8)
+    mapfunc = partial(pytesseract.image_to_string, lang='chi_sim')
+    cl = pool.map(mapfunc, img_cl)
+
+    query = cl[0]
+    cl.pop(0)
+    choice = cl
+    print(query)
+    print(choice)
+
+
+    #query = get_question_from_image(img)
+
+    #choice = get_choices_from_image(img)
 
     return query, choice

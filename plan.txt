@@ -7,4 +7,10 @@ This program consist of following steps:
 
 
 To Do:
-what is the reason behind lxml and html parser with extract google search result
+what is the rttoneason behind lxml and html parser with extract google search result
+
+parallel computing for image recognition
+
+find the button automatically
+
+automatically press bu
